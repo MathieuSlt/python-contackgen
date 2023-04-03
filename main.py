@@ -2,6 +2,8 @@ import docker
 import time
 import tarfile
 import io
+import scapy_attacks
+import threading
 
 container_name = "contackgen-ubuntu2204"
 pcap_container_file = "/data/capture.pcap"
@@ -55,6 +57,24 @@ def verify_if_container_exists():
         pass
 
 
+def get_ip():
+    container = docker_client.containers.get(container_name)
+    return container.attrs['NetworkSettings']['IPAddress']
+
+
+def attack_thread(attack_type, ip, duration):
+    if attack_type == "syn":
+        thread = threading.Thread(target=scapy_attacks.Syn_Flooding_Attack, args=(
+            ip, duration))
+        return thread
+    elif attack_type == "ping":
+        thread = threading.Thread(target=scapy_attacks.Ping_of_death, args=(
+            ip, duration))
+        return thread
+    else:
+        print("Unknown attack type: " + attack_type)
+
+
 if __name__ == "__main__":
     print("Getting the Docker client ...")
     docker_client = docker.from_env()
@@ -62,10 +82,26 @@ if __name__ == "__main__":
     verify_if_container_exists()
 
     container = create_container()
-    execute_payload("./payload.sh")
+
+    ip = get_ip()
+    print("IP: " + ip)
+
+    # Threads creation
+    tread_container = threading.Thread(target=execute_payload, args=(
+        "./payload.sh",))
+    thread_attack = attack_thread("ping", ip, 2)
+
+    # Threads start
+    tread_container.start()
+    time.sleep(4)
+    thread_attack.start()
+
+    # Threads join
+    tread_container.join()
+    thread_attack.join()
 
     # Sleep 20 seconds
-    time.sleep(duration)
+    time.sleep(int(duration))
 
     copy_file()
 
