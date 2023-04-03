@@ -1,2 +1,1 @@
-docker
-scapy
+scapy==2.5.0
