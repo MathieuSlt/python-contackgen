@@ -14,6 +14,11 @@ duration = 10
 
 
 def create_container():
+    """ Create the docker container
+
+    Returns:
+        docker_client.containers: container
+    """
     print("Creating Docker container ...")
     container = docker_client.containers.create(
         image=docker_image, name=container_name, tty=True)
@@ -22,6 +27,11 @@ def create_container():
 
 
 def execute_payload(payload_path):
+    """ Execute the payload.sh script in the container
+
+    Args:
+        payload_path (String): the path of the payload.sh script
+    """
     print("Executing payload.sh in the container ...")
     cmd = ["bash", "-c", payload_path + " -d " + str(duration)]
     exec_id = docker_client.api.exec_create(container=container_name, cmd=cmd)
@@ -31,6 +41,8 @@ def execute_payload(payload_path):
 
 
 def copy_file():
+    """ Copy the pcap file from the container to the local disk
+    """
     print("Copying file from the container to local disk ...")
     stream, _ = docker_client.api.get_archive(
         container_name, pcap_container_file)
@@ -40,6 +52,11 @@ def copy_file():
 
 
 def cleanup(container):
+    """ Cleanup the container (stop and remove it)
+
+    Args:
+        container (docker_client.containers): the docker container to cleanup
+    """
     print("Stopping the container ...")
     container.stop()
 
@@ -49,6 +66,9 @@ def cleanup(container):
 
 
 def verify_if_container_exists():
+    """ Verify if the container already exists
+    If it does exist, stop and remove it
+    """
     try:
         container = docker_client.containers.get(container_name)
         print("Container is already running. Removing it ...")
@@ -59,11 +79,26 @@ def verify_if_container_exists():
 
 
 def get_ip():
+    """ Get the IP of the container
+
+    Returns:
+        ip address (String): the IP of the container
+    """
     container = docker_client.containers.get(container_name)
     return container.attrs['NetworkSettings']['IPAddress']
 
 
 def attack_thread(attack_type, ip, duration):
+    """ Create a thread for the attack
+
+    Args:
+        attack_type (String): the type of the attack
+        ip (String): the IP of the container
+        duration (int): the duration of the attack
+
+    Returns:
+        thread (threading.Thread): the thread
+    """
     if attack_type == "syn":
         thread = threading.Thread(target=scapy_attacks.Syn_Flooding_Attack, args=(
             ip, duration))
@@ -77,6 +112,13 @@ def attack_thread(attack_type, ip, duration):
 
 
 def read_pcap(pcap_file_path, summary=True):
+    """ Read the pcap file
+
+    Args:
+        pcap_file_path (String): the path of the pcap file
+        summary (bool, optional): If we want to log only the packets summary or full information.
+        Defaults to True.
+    """
     print("Reading pcap file ...")
     packets = rdpcap(pcap_local_folder + pcap_file_path)
     with open("packet.log", "w") as f:
