@@ -4,6 +4,7 @@ import tarfile
 import io
 import scapy_attacks
 import threading
+from scapy.all import rdpcap
 
 container_name = "contackgen-ubuntu2204"
 pcap_container_file = "/data/capture.pcap"
@@ -75,6 +76,18 @@ def attack_thread(attack_type, ip, duration):
         print("Unknown attack type: " + attack_type)
 
 
+def read_pcap(pcap_file_path, summary=True):
+    print("Reading pcap file ...")
+    packets = rdpcap(pcap_local_folder + pcap_file_path)
+    with open("packet.log", "w") as f:
+        for packet in packets:
+
+            if summary:
+                f.write(str(packet.summary()) + "\n")
+            else:
+                f.write(str(packet.show(dump=True)) + "\n")
+
+
 if __name__ == "__main__":
     print("Getting the Docker client ...")
     docker_client = docker.from_env()
@@ -106,3 +119,5 @@ if __name__ == "__main__":
     copy_file()
 
     cleanup(container)
+
+    read_pcap("/capture.pcap", summary=False)

@@ -1,5 +1,6 @@
 # Wireshark capture files
 capture/
+*.log
 
 
 # Byte-compiled / optimized / DLL files
