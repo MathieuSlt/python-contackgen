@@ -81,7 +81,6 @@ def read_pcap(pcap_file_path, summary=True):
     packets = rdpcap(pcap_local_folder + pcap_file_path)
     with open("packet.log", "w") as f:
         for packet in packets:
-
             if summary:
                 f.write(str(packet.summary()) + "\n")
             else:
@@ -113,7 +112,7 @@ if __name__ == "__main__":
     tread_container.join()
     thread_attack.join()
 
-    # Sleep 20 seconds
+    # Sleep duration seconds
     time.sleep(int(duration))
 
     copy_file()
