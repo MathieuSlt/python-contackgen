@@ -100,11 +100,11 @@ def attack_thread(attack_type, ip, duration):
         thread (threading.Thread): the thread
     """
     if attack_type == "syn":
-        thread = threading.Thread(target=scapy_attacks.Syn_Flooding_Attack, args=(
+        thread = threading.Thread(target=scapy_attacks.syn_flooding_attack, args=(
             ip, duration))
         return thread
     elif attack_type == "ping":
-        thread = threading.Thread(target=scapy_attacks.Ping_of_death, args=(
+        thread = threading.Thread(target=scapy_attacks.ping_of_death, args=(
             ip, duration))
         return thread
     else:
