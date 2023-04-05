@@ -11,3 +11,10 @@ Only processes with an effective user ID of 0 or the CAP_NET_RAW capability are 
 ```bash
 sudo setcap cap_net_raw=eip $(readlink -f $(which python))
 ```
+
+## Run
+
+```bash
+pip install -r requirements.txt
+python main.py
+```

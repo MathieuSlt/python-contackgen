@@ -16,12 +16,36 @@ class DockerManager:
         self.container_name = container_name
         self.duration = duration
 
+    def pull_docker_image(self) -> None:
+        """ Pull the docker image if not already exists
+        """
+        print("Pulling the docker image ...")
+        try:
+            self.docker_client.images.get(self.docker_image)
+        except docker.errors.ImageNotFound:
+            self.docker_client.images.pull(self.docker_image)
+
+    # @staticmethod
+    def verify_if_container_exists(self) -> None:
+        """ Verify if the container already exists
+        If it does exist, stop and remove it
+        """
+        try:
+            container = self.docker_client.containers.get(self.container_name)
+            print("Container is already running. Removing it ...")
+            if container.status == "running":
+                self.cleanup(container)
+        except docker.errors.NotFound:
+            pass
+
     def create_container(self) -> docker.models.containers.Container:
         """ Create the docker container
 
         Returns:
             docker_client.containers: container
         """
+        self.verify_if_container_exists()
+
         print("Creating Docker container ...")
         container = self.docker_client.containers.create(
             image=self.docker_image, name=self.container_name, tty=True)
@@ -65,18 +89,6 @@ class DockerManager:
         print("Removing the container ...")
         container.remove()
 
-    def verify_if_container_exists(self) -> None:
-        """ Verify if the container already exists
-        If it does exist, stop and remove it
-        """
-        try:
-            container = self.docker_client.containers.get(self.container_name)
-            print("Container is already running. Removing it ...")
-            if container.status == "running":
-                self.cleanup(container)
-        except docker.errors.NotFound:
-            pass
-
     def get_container_ip(self) -> str:
         """ Get the IP of the container
 
@@ -87,12 +99,11 @@ class DockerManager:
         return container.attrs['NetworkSettings']['IPAddress']
 
     def run(self, payload_path: str) -> None:
-        """ Run the docker container
+        """ Run the docker container, execute the payload.sh script and copy the pcap file to the local disk
 
         Args:
             payload_path (str): the path of the payload.sh script
         """
-        self.verify_if_container_exists()
         container = self.create_container()
         self.execute_payload(payload_path)
         self.copy_file_to_local()
