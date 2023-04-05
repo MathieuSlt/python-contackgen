@@ -19,8 +19,8 @@ class ScapyAttack:
         self.duration = duration
 
     def execute(self, duration: int, attack_function: callable) -> None:
-        debut = time.time()
-        while (time.time() - debut) < duration:
+        start = time.time()
+        while (time.time() - start) < duration:
             attack_function()
 
     def smurf_attack(self) -> None:
