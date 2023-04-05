@@ -18,3 +18,9 @@ sudo setcap cap_net_raw=eip $(readlink -f $(which python))
 pip install -r requirements.txt
 python main.py
 ```
+
+## Test
+
+```bash
+python -m pytest test/test_pcap.py
+```

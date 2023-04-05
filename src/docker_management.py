@@ -70,8 +70,8 @@ class DockerManager:
         exec_id = self.docker_client.api.exec_create(
             container=self.container_name, cmd=cmd)
         response = self.docker_client.api.exec_start(exec_id, stream=True)
-        for line in response:
-            print(line.decode('utf-8').strip())
+        # for line in response:
+        #     print(line.decode('utf-8').strip())
 
     def copy_file_to_local(self) -> None:
         """ Copy the pcap file from the container to the local disk
