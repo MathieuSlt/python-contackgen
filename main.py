@@ -64,6 +64,14 @@ def cleanup(container):
     print("Removing the container ...")
     container.remove()
 
+def pull_docker_image():
+    """ Pull the docker image if not already exists
+    """
+    print("Pulling the docker image ...")
+    try:
+        docker_client.images.get(docker_image)
+    except docker.errors.ImageNotFound:
+        docker_client.images.pull(docker_image)
 
 def verify_if_container_exists():
     """ Verify if the container already exists
@@ -132,6 +140,8 @@ def read_pcap(pcap_file_path, summary=True):
 if __name__ == "__main__":
     print("Getting the Docker client ...")
     docker_client = docker.from_env()
+
+    pull_docker_image()
 
     verify_if_container_exists()
 
