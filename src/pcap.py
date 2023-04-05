@@ -23,3 +23,6 @@ class PcapManager:
                     f.write(str(packet.summary()) + "\n")
                 else:
                     f.write(str(packet.show(dump=True)) + "\n")
+
+    def __str__(self) -> str:
+        return f"PcapManager(Find you pcap file here: {self.pcap_local_folder + self.pcap_file_path})"

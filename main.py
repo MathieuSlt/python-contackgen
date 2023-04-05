@@ -7,10 +7,12 @@ import time
 
 if __name__ == "__main__":
     docker_client = DockerManager("contackgen-ubuntu2204", 10)
+    print(docker_client)
     container = docker_client.create_container()
     container_ip = docker_client.get_container_ip()
 
     attack_client = ScapyAttack("127.0.0.1", container_ip, 2)
+    print(attack_client)
 
     tread_docker = threading.Thread(target=docker_client.execute_payload, args=(
         "./payload.sh",))
@@ -27,5 +29,7 @@ if __name__ == "__main__":
     docker_client.copy_file_to_local()
     docker_client.cleanup(container)
 
-    pcap_manager = PcapManager("./capture", "capture.pcap")
+    pcap_manager = PcapManager(
+        docker_client.get_pcap_local_folder(), "capture.pcap")
+    print(pcap_manager)
     pcap_manager.read_pcap(summary=False)

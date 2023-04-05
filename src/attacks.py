@@ -66,3 +66,6 @@ class ScapyAttack:
               " for " + str(self.duration) + " seconds")
         self.execute(self.duration, lambda: scapy.send(
             scapy.fragment(scapy.IP(dst=self.ip_dest)/scapy.ICMP()/('X' * 600))))
+
+    def __str__(self) -> str:
+        return f"ScapyAttack(ip_source={self.ip_source}, ip_dest={self.ip_dest}, duration={self.duration})"
