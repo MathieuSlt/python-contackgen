@@ -32,4 +32,7 @@ if __name__ == "__main__":
     pcap_manager = PcapManager(
         docker_client.get_pcap_local_folder(), "capture.pcap")
     print(pcap_manager)
-    pcap_manager.read_pcap(summary=False)
+    
+    time.sleep(10)
+    # pcap_manager.read_pcap(summary=False)
+    pcap_manager.read_pcap_to_csv()

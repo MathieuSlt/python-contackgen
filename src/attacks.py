@@ -1,7 +1,6 @@
 import scapy.all as scapy
 import time
 
-
 class ScapyAttack:
     """Abstract class for attacks
     """
