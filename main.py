@@ -24,7 +24,7 @@ if __name__ == "__main__":
     tread_docker.join()
     thread_attack.join()
 
-    time.sleep(15)
+    # time.sleep(10)
 
     docker_client.copy_file_to_local()
     docker_client.cleanup(container)
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     pcap_manager = PcapManager(
         docker_client.get_pcap_local_folder(), "capture.pcap")
     print(pcap_manager)
-    
-    time.sleep(10)
+
+    # time.sleep(10)
     # pcap_manager.read_pcap(summary=False)
     pcap_manager.read_pcap_to_csv()
