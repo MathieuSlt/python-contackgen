@@ -45,7 +45,7 @@ class DockerManager:
         except docker.errors.NotFound:
             pass
 
-    def create_container(self):  # -> docker.models.containers.Container:
+    def create_container(self) -> docker.models.containers.Container:
         """ Create the docker container
 
         Returns:
@@ -90,7 +90,7 @@ class DockerManager:
         tar.extractall(path=self.pcap_local_folder)
         tar.close()
 
-    def cleanup(self, container) -> None:
+    def cleanup(self, container: docker.models.containers.Container) -> None:
         """ Cleanup the container (stop and remove it)
 
         Args:
