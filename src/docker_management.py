@@ -45,7 +45,7 @@ class DockerManager:
         except docker.errors.NotFound:
             pass
 
-    def create_container(self) -> docker.models.containers.Container:
+    def create_container(self):  # -> docker.models.containers.Container:
         """ Create the docker container
 
         Returns:
@@ -75,15 +75,22 @@ class DockerManager:
 
     def copy_file_to_local(self) -> None:
         """ Copy the pcap file from the container to the local disk
+
+        The stream object is read in chunks and appended to the data variable until 
+        the entire file is read.
+        Correct the error: tarfile.ReadError: unexpected end of data
         """
         print("Copying file from the container to local disk ...")
         stream, _ = self.docker_client.api.get_archive(
             self.container_name, self.pcap_container_file)
-        tar = tarfile.open(fileobj=io.BytesIO(next(stream)))
+        data = b''
+        for chunk in stream:
+            data += chunk
+        tar = tarfile.open(fileobj=io.BytesIO(data))
         tar.extractall(path=self.pcap_local_folder)
         tar.close()
 
-    def cleanup(self, container: docker.models.containers.Container) -> None:
+    def cleanup(self, container) -> None:
         """ Cleanup the container (stop and remove it)
 
         Args:

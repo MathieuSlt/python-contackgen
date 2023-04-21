@@ -11,7 +11,7 @@ if __name__ == "__main__":
     container = docker_client.create_container()
     container_ip = docker_client.get_container_ip()
 
-    attack_client = ScapyAttack("127.0.0.1", container_ip, 2)
+    attack_client = ScapyAttack("127.0.0.1", container_ip, 4)
     print(attack_client)
 
     tread_docker = threading.Thread(target=docker_client.execute_payload, args=(
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     tread_docker.join()
     thread_attack.join()
 
-    time.sleep(10)
+    time.sleep(15)
 
     docker_client.copy_file_to_local()
     docker_client.cleanup(container)
