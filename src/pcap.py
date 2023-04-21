@@ -41,7 +41,6 @@ class PcapManager:
 
             # Loop through each packet and write its headers to the CSV file
             for packet in packets:
-                packet.show()
                 # Extract the relevant fields from the packet
                 if packet.haslayer('IP'):
                     src_ip = packet['IP'].src
