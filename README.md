@@ -16,7 +16,7 @@ after u ran the program you may want to get back to default:
 ```bash
 sudo setcap -r $(readlink -f $(which python))
 ```
-NB : On kali this line may not needed
+NB : On kali this line may not be needed
 
 ## Usage
 
